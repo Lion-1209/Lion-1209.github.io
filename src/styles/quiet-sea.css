@@ -1,0 +1,93 @@
+/* ═══════════════════════════════════════════════════════════
+   「一片安静的海」全站氛围层（概念稿 personal-site.html 移植）
+   作用于所有 Fuwari 页面（文章 / 归档 / 关于 / 项目）。
+   首页 index.astro 是独立页面，自带同一套氛围，不引入本文件。
+   ═══════════════════════════════════════════════════════════ */
+
+/* 氛围背景：极光 + 粒子画布 + 噪点 + 暗角（fixed，不拦截交互） */
+.quiet-sea-bg {
+	position: fixed;
+	inset: 0;
+	z-index: 0;
+	pointer-events: none;
+	overflow: hidden;
+}
+.quiet-sea-bg canvas {
+	position: absolute;
+	inset: 0;
+}
+.quiet-aurora {
+	position: absolute;
+	border-radius: 50%;
+	filter: blur(70px);
+	mix-blend-mode: screen;
+	animation: quiet-drift 14s ease-in-out infinite alternate;
+}
+.quiet-aurora.a1 {
+	width: 52vw;
+	height: 52vw;
+	left: -12vw;
+	top: -18vw;
+	background: radial-gradient(circle at 30% 30%, #1d4ed8, transparent 65%);
+	opacity: 0.6;
+}
+.quiet-aurora.a2 {
+	width: 44vw;
+	height: 44vw;
+	right: -14vw;
+	top: 24vh;
+	background: radial-gradient(circle at 60% 40%, #0ea5e9, transparent 65%);
+	opacity: 0.45;
+	animation-delay: -5s;
+}
+.quiet-aurora.a3 {
+	width: 60vw;
+	height: 60vw;
+	left: 16vw;
+	bottom: -30vw;
+	background: radial-gradient(circle at 50% 50%, #312e81, transparent 65%);
+	opacity: 0.55;
+	animation-delay: -9s;
+}
+@keyframes quiet-drift {
+	from {
+		transform: translate3d(0, 0, 0) scale(1);
+	}
+	to {
+		transform: translate3d(4vw, -3vh, 0) scale(1.12);
+	}
+}
+.quiet-grain {
+	position: absolute;
+	inset: -50%;
+	opacity: 0.05;
+	mix-blend-mode: overlay;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+}
+
+/* 内容压到氛围层之上 */
+#main-grid,
+#swup-container,
+#toc-panel,
+#toc,
+footer {
+	position: relative;
+	z-index: 1;
+}
+
+/* 暗色玻璃拟态卡片 */
+html.dark .card-base {
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+}
+
+/* 深蓝夜色下的代码块与页面底色微调 */
+html.dark {
+	color-scheme: dark;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.quiet-aurora {
+		animation: none;
+	}
+}
