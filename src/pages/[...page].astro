@@ -9,7 +9,11 @@ import { getSortedPosts } from "../utils/content-utils";
 
 export const getStaticPaths = (async ({ paginate }) => {
 	const allBlogPosts = await getSortedPosts();
-	return paginate(allBlogPosts, { pageSize: PAGE_SIZE });
+	// first page (/) is owned by index.astro (concept homepage);
+	// this route only serves /2/, /3/, ...
+	return paginate(allBlogPosts, { pageSize: PAGE_SIZE }).filter(
+		(r) => r.params.page !== undefined,
+	);
 }) satisfies GetStaticPaths;
 // https://github.com/withastro/astro/issues/6507#issuecomment-1514196992
 
