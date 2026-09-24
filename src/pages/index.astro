@@ -1,4 +1,12 @@
 ---
+// self-hosted fonts (Google Fonts CDN is unreachable in CN)
+// must be imported in frontmatter: imports inside <script> are shipped
+// unprocessed and bare specifiers fail to resolve in the browser
+import "@fontsource/lxgw-wenkai/300.css";
+import "@fontsource/lxgw-wenkai/500.css";
+import "@fontsource/lxgw-wenkai/700.css";
+import "@fontsource/long-cang/400.css";
+import "@fontsource/great-vibes/400.css";
 import { Image } from "astro:assets";
 import avatar from "../assets/images/avatar.jpg";
 ---
@@ -19,14 +27,6 @@ import avatar from "../assets/images/avatar.jpg";
 	<link rel="alternate" type="application/rss+xml" title="Lion" href="/rss.xml" />
 	<title>Lion · 在代码与生活之间</title>
 
-	<script type="module">
-		// self-hosted fonts (Google Fonts CDN is unreachable in CN)
-		import "@fontsource/lxgw-wenkai/300.css";
-		import "@fontsource/lxgw-wenkai/500.css";
-		import "@fontsource/lxgw-wenkai/700.css";
-		import "@fontsource/long-cang/400.css";
-		import "@fontsource/great-vibes/400.css";
-	</script>
 	<style is:global>
 		:root {
 			--bg: #050a18;
