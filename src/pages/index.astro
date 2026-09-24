@@ -1,4 +1,6 @@
 ---
+import { Image } from "astro:assets";
+import avatar from "../assets/images/avatar.jpg";
 ---
 <!doctype html>
 <!--
@@ -29,6 +31,7 @@
 		import "@fontsource/space-grotesk/500.css";
 		import "@fontsource/space-grotesk/700.css";
 		import "@fontsource/long-cang/400.css";
+		import "@fontsource/great-vibes/400.css";
 	</script>
 	<style is:global>
 		:root {
@@ -45,6 +48,7 @@
 			--font-serif: "Noto Serif SC", "Songti SC", "SimSun", serif;
 			--font-sans: "Space Grotesk", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
 			--font-hand: "Long Cang", "Kaiti SC", cursive;
+			--font-script: "Great Vibes", "Segoe Script", "Brush Script MT", cursive;
 			--ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
 		}
 
@@ -268,6 +272,17 @@
 			max-width: 900px;
 			will-change: transform, opacity;
 		}
+		.avatar {
+			width: 92px;
+			height: 92px;
+			border-radius: 50%;
+			object-fit: cover;
+			margin-bottom: 30px;
+			border: 1px solid rgba(148, 178, 255, 0.3);
+			box-shadow:
+				0 0 0 6px rgba(94, 162, 255, 0.06),
+				0 14px 40px -12px rgba(37, 99, 235, 0.45);
+		}
 		.eyebrow {
 			display: flex;
 			align-items: center;
@@ -294,6 +309,13 @@
 			-webkit-background-clip: text;
 			background-clip: text;
 			color: transparent;
+		}
+		.hero-title .name {
+			font-family: var(--font-script);
+			font-weight: 400;
+			font-size: 1.1em;
+			letter-spacing: 0.01em;
+			display: inline-block;
 		}
 		.hand {
 			font-family: var(--font-hand);
@@ -868,6 +890,11 @@
 			.menu-btn {
 				display: grid;
 			}
+			.avatar {
+				width: 76px;
+				height: 76px;
+				margin-bottom: 22px;
+			}
 			.hero-role {
 				font-size: 0.95rem;
 				letter-spacing: 0.04em;
@@ -989,8 +1016,9 @@
 			<span class="side-tag" aria-hidden="true">SLOW · STEADY · FREE</span>
 			<div class="wrap">
 				<div class="hero-inner" id="heroInner">
+					<Image src={avatar} alt="Lion 的头像" class="avatar" />
 					<p class="eyebrow">你好，欢迎来到我的小站</p>
-					<h1 class="hero-title">Lion<span class="hand">自由且自在</span></h1>
+					<h1 class="hero-title"><span class="name">Lion</span><span class="hand">自由且自在</span></h1>
 					<p class="hero-role">全栈开发者 <b>·</b> 文字记录者 <b>·</b> 永远在路上的旅人</p>
 					<p class="hero-lead">
 						这里记录我写的代码、读过的书、走过的路，以及那些深夜里的奇思妙想。没有喧宾夺主的装饰，只有一片安静的海——愿你在光标与浪花之间，找到属于自己的节奏。
