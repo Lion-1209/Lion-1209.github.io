@@ -1,0 +1,131 @@
+---
+import "@fontsource/noto-serif-sc/500.css";
+import "@fontsource/noto-serif-sc/700.css";
+---
+<section class="home-hero card-base onload-animation mb-4">
+    <div class="hero-wash" aria-hidden="true"></div>
+    <div class="orb orb-a" aria-hidden="true"></div>
+    <div class="orb orb-b" aria-hidden="true"></div>
+    <div class="hero-grain" aria-hidden="true"></div>
+
+    <div class="relative z-10 flex flex-col items-center gap-5 py-14 md:py-20 px-6">
+        <div class="onload-animation text-xs font-semibold tracking-[0.35em] uppercase text-[var(--primary)]" style="animation-delay: calc(var(--content-delay) + 50ms)">
+            Embedded × AI Agent
+        </div>
+        <h1 class="onload-animation font-serif-sc font-bold text-3xl md:text-5xl leading-snug tracking-wide text-black/80 dark:text-white/90 max-w-2xl" style="animation-delay: calc(var(--content-delay) + 150ms)">
+            在硬件与智能体之间，<br />留一片海。
+        </h1>
+        <p class="onload-animation text-sm md:text-base text-black/55 dark:text-white/60 max-w-xl leading-relaxed" style="animation-delay: calc(var(--content-delay) + 250ms)">
+            你好，我是 Lion。写 Agent 教程，做开源硬件——把复杂留给代码，把简单留给人。
+        </p>
+        <div class="onload-animation flex flex-wrap justify-center gap-3 mt-2" style="animation-delay: calc(var(--content-delay) + 350ms)">
+            <a href="/archive/" class="btn-hero-primary">开始阅读</a>
+            <a href="/projects/" class="btn-hero-ghost">看看项目</a>
+        </div>
+    </div>
+</section>
+
+<style>
+    .home-hero {
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+        border-radius: var(--radius-large);
+    }
+    .font-serif-sc {
+        font-family: "Noto Serif SC", "Songti SC", serif;
+    }
+
+    /* soft blue washes */
+    .hero-wash {
+        position: absolute;
+        inset: 0;
+        z-index: -2;
+        background:
+            radial-gradient(52rem 30rem at 12% -10%, oklch(0.9 0.06 230 / 0.95), transparent 60%),
+            radial-gradient(46rem 26rem at 92% -5%, oklch(0.88 0.07 210 / 0.85), transparent 55%),
+            radial-gradient(44rem 26rem at 50% 125%, oklch(0.9 0.05 255 / 0.85), transparent 60%);
+    }
+
+    /* floating glow orbs */
+    .orb {
+        position: absolute;
+        z-index: -1;
+        border-radius: 9999px;
+        filter: blur(52px);
+        animation: hero-drift 16s ease-in-out infinite alternate;
+    }
+    .orb-a {
+        width: 17rem;
+        height: 17rem;
+        top: -5rem;
+        right: -4rem;
+        background: radial-gradient(circle, oklch(0.78 0.11 220 / 0.6), transparent 70%);
+    }
+    .orb-b {
+        width: 13rem;
+        height: 13rem;
+        bottom: -4rem;
+        left: -3rem;
+        animation-delay: -8s;
+        background: radial-gradient(circle, oklch(0.82 0.09 250 / 0.55), transparent 70%);
+    }
+    @keyframes hero-drift {
+        from { transform: translate3d(0, 0, 0) scale(1); }
+        to { transform: translate3d(-1.6rem, 1.3rem, 0) scale(1.08); }
+    }
+
+    /* film grain for texture */
+    .hero-grain {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        opacity: 0.22;
+        mix-blend-mode: overlay;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='120' height='120' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    }
+
+    /* buttons */
+    .btn-hero-primary {
+        padding: 0.625rem 1.75rem;
+        border-radius: 9999px;
+        font-weight: 500;
+        font-size: 0.9375rem;
+        color: white;
+        background: var(--primary);
+        box-shadow: 0 10px 28px -8px oklch(0.55 0.16 230 / 0.5);
+        transition: opacity 200ms ease, transform 200ms ease;
+    }
+    .btn-hero-primary:hover { opacity: 0.92; }
+    .btn-hero-primary:active { transform: scale(0.96); }
+    .btn-hero-ghost {
+        padding: 0.625rem 1.75rem;
+        border-radius: 9999px;
+        font-weight: 500;
+        font-size: 0.9375rem;
+        color: oklch(0.35 0.04 250);
+        border: 1px solid oklch(0.35 0.04 250 / 0.25);
+        transition: border-color 200ms ease, color 200ms ease, transform 200ms ease;
+    }
+    .btn-hero-ghost:hover { border-color: var(--primary); color: var(--primary); }
+    .btn-hero-ghost:active { transform: scale(0.96); }
+
+    /* dark mode: deep-ocean glow */
+    :global(.dark) .hero-wash {
+        background:
+            radial-gradient(50rem 30rem at 12% -10%, oklch(0.45 0.1 245 / 0.4), transparent 60%),
+            radial-gradient(46rem 26rem at 92% -5%, oklch(0.42 0.11 220 / 0.33), transparent 55%),
+            radial-gradient(44rem 26rem at 50% 125%, oklch(0.38 0.1 260 / 0.3), transparent 60%);
+    }
+    :global(.dark) .orb-a { background: radial-gradient(circle, oklch(0.55 0.14 240 / 0.45), transparent 70%); }
+    :global(.dark) .orb-b { background: radial-gradient(circle, oklch(0.5 0.12 265 / 0.4), transparent 70%); }
+    :global(.dark) .hero-grain { opacity: 0.3; }
+    :global(.dark) .btn-hero-ghost {
+        color: oklch(0.85 0.03 250);
+        border-color: oklch(0.85 0.03 250 / 0.3);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        .orb { animation: none; }
+    }
+</style>
