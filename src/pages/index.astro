@@ -179,6 +179,50 @@ import avatar from "../assets/images/avatar.jpg";
 			transition: opacity 0.4s;
 		}
 
+		/* ═══ 点击特效：细环 + 微光点 ═══ */
+		.click-fx {
+			position: fixed;
+			z-index: 95;
+			pointer-events: none;
+			width: 14px;
+			height: 14px;
+			margin: -7px 0 0 -7px;
+			border-radius: 50%;
+			border: 1px solid rgba(125, 211, 252, 0.55);
+			animation: click-ring 0.7s var(--ease-out) forwards;
+		}
+		.click-dot {
+			position: fixed;
+			z-index: 95;
+			pointer-events: none;
+			width: 5px;
+			height: 5px;
+			margin: -2.5px 0 0 -2.5px;
+			border-radius: 50%;
+			background: rgba(125, 211, 252, 0.85);
+			animation: click-dot 0.5s var(--ease-out) forwards;
+		}
+		@keyframes click-ring {
+			from {
+				opacity: 0.9;
+				transform: scale(0.4);
+			}
+			to {
+				opacity: 0;
+				transform: scale(6);
+			}
+		}
+		@keyframes click-dot {
+			from {
+				opacity: 1;
+				transform: scale(1);
+			}
+			to {
+				opacity: 0;
+				transform: scale(2.2);
+			}
+		}
+
 		/* ═══ 顶部导航 ═══ */
 		.nav {
 			position: fixed;
@@ -1204,14 +1248,38 @@ import avatar from "../assets/images/avatar.jpg";
 				a: number;
 			};
 			type Dust = { x: number; y: number; r: number; p: number; c: string };
+			type Meteor = {
+				x: number;
+				y: number;
+				vx: number;
+				vy: number;
+				len: number;
+				life: number;
+				maxLife: number;
+			};
 			var pts: Particle[] = [],
 				dust: Dust[] = [],
+				meteors: Meteor[] = [],
 				w = 0,
 				h = 0,
 				raf = 0,
 				running = false;
 			var pointer = { x: -9999, y: -9999 };
 			var LINK = 118;
+			var nextMeteorAt = 0;
+
+			function spawnMeteor() {
+				var dir = Math.random() > 0.5 ? 1 : -1;
+				meteors.push({
+					x: Math.random() * w,
+					y: -10 - Math.random() * h * 0.3,
+					vx: dir * (3.5 + Math.random() * 3),
+					vy: 5.5 + Math.random() * 2.5,
+					len: 100 + Math.random() * 80,
+					life: 0,
+					maxLife: 90 + Math.random() * 50,
+				});
+			}
 
 			function seed() {
 				var density = w < 640 ? 22000 : 15000;
@@ -1317,9 +1385,46 @@ import avatar from "../assets/images/avatar.jpg";
 						}
 					}
 				}
+
+				/* ─── 流星：亮头 + 渐变拖尾，出画即消亡 ─── */
+				for (i = 0; i < meteors.length; i++) {
+					var m = meteors[i];
+					m.x += m.vx;
+					m.y += m.vy;
+					m.life++;
+					if (m.x < -220 || m.x > w + 220 || m.y > h + 220 || m.life > m.maxLife) {
+						meteors.splice(i, 1);
+						i--;
+						continue;
+					}
+					var fadeIn = Math.min(1, m.life / 10);
+					var fadeOut = m.life > m.maxLife - 22 ? Math.max(0, (m.maxLife - m.life) / 22) : 1;
+					var alpha = fadeIn * fadeOut;
+					var spd = Math.sqrt(m.vx * m.vx + m.vy * m.vy);
+					var txl = m.x - (m.vx / spd) * m.len;
+					var tyl = m.y - (m.vy / spd) * m.len;
+					var mg = ctx.createLinearGradient(m.x, m.y, txl, tyl);
+					mg.addColorStop(0, "rgba(230,242,255," + (0.85 * alpha).toFixed(3) + ")");
+					mg.addColorStop(1, "rgba(125,211,252,0)");
+					ctx.strokeStyle = mg;
+					ctx.lineWidth = 1.4;
+					ctx.beginPath();
+					ctx.moveTo(m.x, m.y);
+					ctx.lineTo(txl, tyl);
+					ctx.stroke();
+					ctx.fillStyle = "rgba(235,245,255," + (0.95 * alpha).toFixed(3) + ")";
+					ctx.beginPath();
+					ctx.arc(m.x, m.y, 1.6, 0, Math.PI * 2);
+					ctx.fill();
+				}
 			}
 
 			function loop() {
+				var now = performance.now();
+				if (now > nextMeteorAt) {
+					spawnMeteor();
+					nextMeteorAt = now + 2600 + Math.random() * 5200;
+				}
 				drawFrame();
 				raf = requestAnimationFrame(loop);
 			}
@@ -1488,6 +1593,30 @@ import avatar from "../assets/images/avatar.jpg";
 					glow.style.transform = "translate(" + (gx - 230) + "px," + (gy - 230) + "px)";
 					requestAnimationFrame(glowLoop);
 				})();
+			}
+
+			/* ─── 点击特效：细环 + 微光点，动画结束自行清理 ─── */
+			if (!reduceMotion) {
+				document.addEventListener("pointerdown", function (e: PointerEvent) {
+					var x = e.clientX + "px";
+					var y = e.clientY + "px";
+					var ring = document.createElement("div");
+					ring.className = "click-fx";
+					ring.style.left = x;
+					ring.style.top = y;
+					ring.addEventListener("animationend", function () {
+						ring.remove();
+					});
+					document.body.appendChild(ring);
+					var dot = document.createElement("div");
+					dot.className = "click-dot";
+					dot.style.left = x;
+					dot.style.top = y;
+					dot.addEventListener("animationend", function () {
+						dot.remove();
+					});
+					document.body.appendChild(dot);
+				});
 			}
 		})();
 	</script>
