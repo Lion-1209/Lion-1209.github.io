@@ -7,6 +7,7 @@ import "@fontsource/lxgw-wenkai/500.css";
 import "@fontsource/lxgw-wenkai/700.css";
 import "@fontsource/long-cang/400.css";
 import "@fontsource/great-vibes/400.css";
+import "@fontsource/zhi-mang-xing/400.css";
 import { Image } from "astro:assets";
 import avatar from "../assets/images/avatar.jpg";
 ---
@@ -43,6 +44,8 @@ import avatar from "../assets/images/avatar.jpg";
 			--font-sans: "LXGW WenKai", "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
 			--font-hand: "Long Cang", "Kaiti SC", cursive;
 			--font-script: "Great Vibes", "Segoe Script", "Brush Script MT", cursive;
+			--font-xing: "Zhi Mang Xing", "STXingkai", "KaiTi", cursive;
+			--gold: #d9b98a;
 			--ease-out: cubic-bezier(0.22, 0.61, 0.36, 1);
 		}
 
@@ -221,6 +224,24 @@ import avatar from "../assets/images/avatar.jpg";
 				opacity: 0;
 				transform: scale(2.2);
 			}
+		}
+
+		/* ═══ 随机散落格言（氛围层，不干扰阅读） ═══ */
+		.motto-layer {
+			position: fixed;
+			inset: 0;
+			z-index: 0;
+			pointer-events: none;
+			overflow: hidden;
+		}
+		.motto {
+			position: absolute;
+			white-space: nowrap;
+			font-family: var(--font-hand);
+			color: var(--ink-soft);
+			opacity: var(--op, 0.1);
+			transform: rotate(var(--rot, 0deg));
+			letter-spacing: 0.22em;
 		}
 
 		/* ═══ 顶部导航 ═══ */
@@ -883,6 +904,45 @@ import avatar from "../assets/images/avatar.jpg";
 			height: 19px;
 		}
 
+		/* ═══ 个人 slogan ═══ */
+		.slogan {
+			text-align: center;
+			padding: clamp(64px, 10vh, 110px) 0 clamp(48px, 8vh, 90px);
+		}
+		.slogan-mark {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			gap: 18px;
+			margin-bottom: 26px;
+			color: var(--gold);
+		}
+		.slogan-mark::before,
+		.slogan-mark::after {
+			content: "";
+			width: 42px;
+			height: 1px;
+			background: linear-gradient(90deg, transparent, var(--gold));
+			opacity: 0.55;
+		}
+		.slogan-mark::after {
+			background: linear-gradient(90deg, var(--gold), transparent);
+		}
+		.slogan-mark svg {
+			width: 15px;
+			height: 15px;
+			opacity: 0.8;
+		}
+		.slogan-text {
+			font-family: var(--font-xing);
+			font-size: clamp(1.45rem, 3.4vw, 2.3rem);
+			font-weight: 400;
+			letter-spacing: 0.14em;
+			line-height: 1.7;
+			color: var(--gold);
+			text-shadow: 0 0 28px rgba(217, 185, 138, 0.22);
+		}
+
 		/* ═══ 页脚 ═══ */
 		footer {
 			position: relative;
@@ -1029,6 +1089,8 @@ import avatar from "../assets/images/avatar.jpg";
 		<div class="grain"></div>
 		<div class="vignette"></div>
 	</div>
+	<!-- 随机散落格言（JS 生成位置） -->
+	<div class="motto-layer" id="mottoLayer" aria-hidden="true"></div>
 	<div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
 
 	<!-- 导航 -->
@@ -1217,6 +1279,16 @@ import avatar from "../assets/images/avatar.jpg";
 			</div>
 		</section>
 	</main>
+
+	<!-- ═══ 个人 slogan ═══ -->
+	<section class="slogan">
+		<div class="wrap">
+			<div class="slogan-mark reveal" aria-hidden="true">
+				<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" /></svg>
+			</div>
+			<p class="slogan-text reveal" style="--d: 0.1s">技术的最终意义就是普及社会</p>
+		</div>
+	</section>
 
 	<footer>
 		<div class="wrap foot-inner">
@@ -1617,6 +1689,24 @@ import avatar from "../assets/images/avatar.jpg";
 					});
 					document.body.appendChild(dot);
 				});
+			}
+
+			/* ─── 随机散落格言：每次载入随机位置 / 角度 / 浓度 ─── */
+			var mottoLayer = document.getElementById("mottoLayer");
+			if (mottoLayer) {
+				var mottos = ["未来总会有惊喜发生", "或许自由更胜一筹", "荒谬当道"];
+				var mi;
+				for (mi = 0; mi < 7; mi++) {
+					var ms = document.createElement("span");
+					ms.className = "motto";
+					ms.textContent = mottos[mi % mottos.length];
+					ms.style.left = (2 + Math.random() * 86).toFixed(2) + "%";
+					ms.style.top = (3 + Math.random() * 88).toFixed(2) + "%";
+					ms.style.fontSize = (0.85 + Math.random() * 0.45).toFixed(2) + "rem";
+					ms.style.setProperty("--rot", (Math.random() * 14 - 7).toFixed(1) + "deg");
+					ms.style.setProperty("--op", (0.07 + Math.random() * 0.08).toFixed(3));
+					mottoLayer.appendChild(ms);
+				}
 			}
 		})();
 	</script>
