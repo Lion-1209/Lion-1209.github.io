@@ -25,7 +25,7 @@ src/
 ├─ content/
 │  ├─ posts/        # 文章（Markdown）
 │  └─ spec/         # 单页内容（关于页等）
-├─ pages/           # 路由：首页 / 归档 / 项目 / 关于 / 文章页
+├─ pages/           # 路由：首页 / 归档 / 关于 / 文章页
 ├─ components/      # 组件（Astro + Svelte）
 ├─ layouts/         # 页面布局
 ├─ styles/          # 全局样式

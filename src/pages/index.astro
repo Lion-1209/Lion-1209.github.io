@@ -836,6 +836,13 @@ import avatar from "../assets/images/avatar.jpg";
 			font-size: 0.85rem;
 			color: var(--accent);
 		}
+		/* 拉伸链接：整卡皆可点击 */
+		.work-go::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			z-index: 1;
+		}
 		.work-go svg {
 			width: 15px;
 			height: 15px;
